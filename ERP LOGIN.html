@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>School ERP | Complete System - Fees Table Aligned</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0a0c12;
+            color: #eef2ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .card {
+            background: #13161f;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #2a2f3f;
+        }
+        h1, h2, h3 { margin-bottom: 16px; }
+        h1 { font-size: 1.8rem; background: linear-gradient(135deg, #c0e0ff, #9f7aea); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
+        input, select, button {
+            padding: 10px 14px;
+            margin: 5px 0;
+            border-radius: 12px;
+            border: none;
+            background: #1e2432;
+            color: white;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #2c3e66;
+            cursor: pointer;
+            width: auto;
+            padding: 10px 20px;
+            margin-right: 10px;
+        }
+        button.primary { background: #3b82f6; }
+        button.danger { background: #b91c2c; }
+        button.success { background: #10b981; }
+        button.warning { background: #e67e22; }
+        button.info { background: #06b6d4; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #2a2f42;
+            padding: 12px 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th { background: #1b212f; font-weight: 600; }
+        .row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+        .row > * { flex: 1; min-width: 180px; }
+        .hidden { display: none; }
+        .grid-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .info-text { color: #9ca3af; font-size: 0.85rem; margin: 10px 0; }
+        .period-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin: 10px 0; }
+        .period-card { background: #1e2537; padding: 10px; border-radius: 12px; text-align: center; }
+        .present-badge { color: #10b981; font-weight: bold; }
+        .absent-badge { color: #ef4444; font-weight: bold; }
+        .percentage-high { color: #10b981; font-weight: bold; }
+        .percentage-medium { color: #f59e0b; font-weight: bold; }
+        .percentage-low { color: #ef4444; font-weight: bold; }
+        .locked-badge { background: #b91c2c; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; display: inline-block; }
+        .request-card { background: #1a1f2c; border-radius: 16px; padding: 15px; margin-bottom: 12px; border-left: 4px solid #e67e22; }
+        .attendance-check-group { display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0; max-height: 300px; overflow-y: auto; padding: 10px; background: #1a1f2c; border-radius: 16px; }
+        .attendance-check-group label { background: #1e2537; padding: 8px 15px; border-radius: 30px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .attendance-check-group label:hover { background: #2a3348; }
+        .teacher-table, .student-table { width: 100%; border-collapse: collapse; }
+        .class-filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; padding: 10px; background: #1a1f2c; border-radius: 20px; }
+        .class-btn { background: #2c3e66; padding: 8px 18px; border-radius: 30px; cursor: pointer; border: none; color: white; }
+        .class-btn.active { background: #3b82f6; }
+        .class-btn:hover { background: #4c9aff; }
+        .date-selector { background: #1a1f2c; padding: 15px; border-radius: 16px; margin-bottom: 20px; }
+        .edit-attendance-panel { background: #1a1f2c; padding: 20px; border-radius: 16px; margin-top: 15px; }
+        .summary-stats { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
+        .stat-card { background: #0f121c; padding: 15px 25px; border-radius: 20px; text-align: center; flex: 1; min-width: 120px; }
+        .stat-number { font-size: 2rem; font-weight: bold; }
+        .stat-label { color: #9ca3af; font-size: 0.85rem; }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .search-input { flex: 2; min-width: 200px; }
+        .bulk-actions { display: flex; gap: 10px; margin: 15px 0; padding: 10px; background: #0f121c; border-radius: 16px; flex-wrap: wrap; }
+        .import-export-row { background: #0f121c; padding: 15px; border-radius: 20px; margin-bottom: 20px; border-left: 4px solid #3b82f6; }
+        .report-table-wrapper { overflow-x: auto; margin-top: 20px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { padding: 12px; text-align: center; border: 1px solid #2a2f42; }
+        .report-table th { background: #1b212f; }
+        .fee-paid { color: #10b981; font-weight: bold; }
+        .fee-pending { color: #ef4444; font-weight: bold; }
+        .fee-partial { color: #f59e0b; font-weight: bold; }
+        .notification-bell { background: #ef4444; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; margin-left: 8px; }
+        .notification-item { background: #1e2537; border-left: 4px solid #3b82f6; padding: 12px; margin-bottom: 10px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .notification-content { flex: 1; }
+        .delete-notif-btn { background: #b91c2c; padding: 4px 12px; font-size: 0.8rem; margin: 0; }
+        .student-import-btn { background: #8b5cf6; padding: 10px 20px; border-radius: 30px; cursor: pointer; display: inline-block; margin-bottom: 15px; }
+        .incharge-badge { background: #3b82f6; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin-left: 10px; }
+        .marks-present { background-color: rgba(16, 185, 129, 0.2); }
+        .marks-absent { background-color: rgba(239, 68, 68, 0.2); }
+        @media (max-width: 700px) { body { padding: 12px; } .card { padding: 16px; } th, td { padding: 8px; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card" id="loginPage">
+        <h1>🏫 School ERP · Complete Management System</h1>
+        <p style="margin-bottom: 15px;">Teachers mark attendance ONLY for their subject periods | All tables properly aligned</p>
+        <div class="row">
+            <select id="role">
+                <option value="supervisor">Supervisor</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+            </select>
+            <input id="username" placeholder="Login ID / Username">
+            <input id="password" type="password" placeholder="Password">
+        </div>
+        <button onclick="login()" class="primary">🔐 Sign in</button>
+    </div>
+    <div id="app"></div>
+</div>
+
+<script>
+    // ======================= DATA & CONSTANTS =======================
+    let GLOBAL_SUBJECTS = JSON.parse(localStorage.getItem('erp_global_subjects') || '["MATHS", "PHYSICS", "SOCIAL", "ENGLISH", "HINDI", "TELUGU", "BIOLOGY"]');
+    let GLOBAL_EXAMS = JSON.parse(localStorage.getItem('erp_global_exams') || '["FA1", "FA2", "FA3", "FA4", "SA1", "PF1"]');
+    
+    const CLASSES = ['8A', '8B', '8C', '9A', '9B', '9C', '10'];
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const PERIODS = 9;
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    let EXAM_CONFIG = {};
+    function rebuildExamConfig() {
+        GLOBAL_EXAMS.forEach(exam => {
+            if(!EXAM_CONFIG[exam]) {
+                if(exam === 'SA1' || exam === 'PF1') EXAM_CONFIG[exam] = { '8-9': 80, '10': 100 };
+                else EXAM_CONFIG[exam] = { '8-9': 50, '10': 50 };
+            }
+        });
+    }
+    rebuildExamConfig();
+    function getMaxMarksForExam(exam, className) { 
+        let cfg = EXAM_CONFIG[exam]; 
+        if(!cfg) return 100; 
+        let group = (className === '10') ? '10' : '8-9'; 
+        return cfg[group] || 100; 
+    }
+
+    let teachers = JSON.parse(localStorage.getItem('erp_teachers') || '[]');
+    let students = JSON.parse(localStorage.getItem('erp_students') || '[]');
+    let attendanceLog = JSON.parse(localStorage.getItem('erp_attendance') || '[]');
+    let timetableDB = JSON.parse(localStorage.getItem('erp_timetable') || '{}');
+    let marksDB = JSON.parse(localStorage.getItem('erp_marks') || '{}');
+    let editRequests = JSON.parse(localStorage.getItem('erp_edit_requests') || '[]');
+    let lockedAttendance = JSON.parse(localStorage.getItem('erp_locked_attendance') || '[]');
+    let lockedMarks = JSON.parse(localStorage.getItem('erp_locked_marks') || '[]');
+    let feesDB = JSON.parse(localStorage.getItem('erp_fees') || '{}');
+    let notificationsDB = JSON.parse(localStorage.getItem('erp_notifications') || '[]');
+    let classIncharge = JSON.parse(localStorage.getItem('erp_class_incharge') || '{}');
+
+    const supervisorCred = { id: 'admin', password: 'admin123' };
+    let currentUser = null;
+    let selectedAttendanceDate = new Date().toISOString().slice(0,10);
+    let currentClassFilter = 'all';
+
+    function getTodayDate() { return new Date().toISOString().slice(0,10); }
+    function getDayName(dateStr) { 
+        let date = new Date(dateStr);
+        return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][date.getDay()]; 
+    }
+    function isAttendanceLocked(date, classSec, periodNum) { 
+        return lockedAttendance.some(l => l.date === date && l.classSec === classSec && l.periodNum === periodNum); 
+    }
+    function isMarkLocked(studentId, subject, exam) { 
+        return lockedMarks.some(l => l.studentId === studentId && l.subject === subject && l.exam === exam); 
+    }
+
+    function saveAll() { 
+        localStorage.setItem('erp_teachers', JSON.stringify(teachers)); 
+        localStorage.setItem('erp_students', JSON.stringify(students)); 
+        localStorage.setItem('erp_attendance', JSON.stringify(attendanceLog)); 
+        localStorage.setItem('erp_timetable', JSON.stringify(timetableDB)); 
+        localStorage.setItem('erp_marks', JSON.stringify(marksDB)); 
+        localStorage.setItem('erp_edit_requests', JSON.stringify(editRequests));
+        localStorage.setItem('erp_locked_attendance', JSON.stringify(lockedAttendance));
+        localStorage.setItem('erp_locked_marks', JSON.stringify(lockedMarks));
+        localStorage.setItem('erp_fees', JSON.stringify(feesDB));
+        localStorage.setItem('erp_global_subjects', JSON.stringify(GLOBAL_SUBJECTS));
+        localStorage.setItem('erp_global_exams', JSON.stringify(GLOBAL_EXAMS));
+        localStorage.setItem('erp_notifications', JSON.stringify(notificationsDB));
+        localStorage.setItem('erp_class_incharge', JSON.stringify(classIncharge));
+    }
+
+    function initDemoData() {
+        if(teachers.length === 0) {
+            teachers.push({ id: 'T001', username: 'teacher1', password: 'teacher123', name: 'Prof. Williams', subject: 'MATHS', classes: ['8A', '8B', '9A', '10'] });
+            teachers.push({ id: 'T002', username: 'teacher2', password: 'teacher123', name: 'Dr. Newton', subject: 'PHYSICS', classes: ['8A', '8B', '9A', '9B', '10'] });
+            teachers.push({ id: 'T003', username: 'teacher3', password: 'teacher123', name: 'Ms. Johnson', subject: 'ENGLISH', classes: ['8A', '8B', '8C', '9C'] });
+        }
+        if(students.length === 0) {
+            students.push({ id: 'S1001', rollNo: 1, username: 'student1', password: 'stud@101', name: 'Emma Watson', class: '10', parent: 'Helen Watson', phone: '9988776655' });
+            students.push({ id: 'S1002', rollNo: 2, username: 'student2', password: 'stud@102', name: 'Liam Chen', class: '10', parent: 'David Chen', phone: '9988776644' });
+            students.push({ id: 'S1003', rollNo: 3, username: 'student3', password: 'stud@103', name: 'Aryan Sharma', class: '10', parent: 'Raj Sharma', phone: '9988776633' });
+            students.push({ id: 'S2001', rollNo: 1, username: 'student4', password: 'stud@201', name: 'Aisha Kapoor', class: '8A', parent: 'Rekha Kapoor', phone: '9988776622' });
+            students.push({ id: 'S2002', rollNo: 2, username: 'student5', password: 'stud@202', name: 'Rohan Mehta', class: '8A', parent: 'Neha Mehta', phone: '9988776611' });
+            students.push({ id: 'S2003', rollNo: 1, username: 'student6', password: 'stud@203', name: 'Zara Khan', class: '8B', parent: 'Imran Khan', phone: '9988776600' });
+        }
+        if(Object.keys(timetableDB).length === 0) {
+            CLASSES.forEach(cls => { 
+                timetableDB[cls] = {}; 
+                DAYS.forEach(day => { 
+                    let slots = []; 
+                    for(let i=1;i<=PERIODS;i++) { 
+                        let sub = GLOBAL_SUBJECTS[i % GLOBAL_SUBJECTS.length]; 
+                        slots.push(`${sub}`); 
+                    } 
+                    timetableDB[cls][day] = slots; 
+                }); 
+            });
+        }
+        if(Object.keys(feesDB).length === 0) {
+            students.forEach(s => {
+                if(!feesDB[s.id]) {
+                    let total = (s.class === '10') ? 25000 : 18000;
+                    feesDB[s.id] = { studentId: s.id, name: s.name, class: s.class, totalFee: total, paid: 0, due: total, transactions: [] };
+                }
+            });
+        }
+        if(notificationsDB.length === 0) {
+            notificationsDB.push({ id: Date.now(), classTarget: 'all', title: 'Welcome to ERP', message: 'System is ready for academic year 2026.', date: getTodayDate() });
+        }
+        if(Object.keys(classIncharge).length === 0) {
+            classIncharge['10'] = 'T001';
+            classIncharge['8A'] = 'T002';
+            classIncharge['8B'] = 'T003';
+        }
+        
+        // Add some demo marks for testing
+        if(Object.keys(marksDB).length === 0) {
+            marksDB['S1001_10'] = {
+                'MATHS': { 'FA1': 45, 'FA2': 48, 'SA1': 85 },
+                'PHYSICS': { 'FA1': 42, 'FA2': 46, 'SA1': 78 },
+                'ENGLISH': { 'FA1': 47, 'FA2': 49, 'SA1': 92 }
+            };
+            marksDB['S2001_8A'] = {
+                'MATHS': { 'FA1': 42, 'FA2': 44, 'SA1': 75 },
+                'ENGLISH': { 'FA1': 45, 'FA2': 47, 'SA1': 82 }
+            };
+        }
+        
+        saveAll();
+    }
+
+    window.exportAllData = function() {
+        const fullData = { teachers, students, attendanceLog, timetableDB, marksDB, editRequests, lockedAttendance, lockedMarks, feesDB, globalSubjects: GLOBAL_SUBJECTS, globalExams: GLOBAL_EXAMS, notifications: notificationsDB, classIncharge };
+        const dataStr = JSON.stringify(fullData, null, 2);
+        const blob = new Blob([dataStr], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `school_erp_backup_${new Date().toISOString().slice(0,19)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("✅ All data exported successfully!");
+    }
+
+    window.importAllData = function(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (imported.teachers) teachers = imported.teachers;
+                if (imported.students) students = imported.students;
+                if (imported.attendanceLog) attendanceLog = imported.attendanceLog;
+                if (imported.timetableDB) timetableDB = imported.timetableDB;
+                if (imported.marksDB) marksDB = imported.marksDB;
+                if (imported.editRequests) editRequests = imported.editRequests;
+                if (imported.lockedAttendance) lockedAttendance = imported.lockedAttendance;
+                if (imported.lockedMarks) lockedMarks = imported.lockedMarks;
+                if (imported.feesDB) feesDB = imported.feesDB;
+                if (imported.globalSubjects) { GLOBAL_SUBJECTS = imported.globalSubjects; }
+                if (imported.globalExams) { GLOBAL_EXAMS = imported.globalExams; rebuildExamConfig(); }
+                if (imported.notifications) notificationsDB = imported.notifications;
+                if (imported.classIncharge) classIncharge = imported.classIncharge;
+                saveAll();
+                alert("✅ Data imported.");
+                if(currentUser) {
+                    if(currentUser.role === 'supervisor') renderSupervisorDashboard();
+                    else if(currentUser.role === 'teacher') renderTeacherPanel();
+                    else if(currentUser.role === 'student') renderStudentPanel();
+                } else location.reload();
+            } catch(err) { alert("❌ Invalid JSON file."); }
+        };
+        reader.readAsText(file);
+    }
+
+    window.login = function() {
+        const role = document.getElementById('role').value;
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if(role === 'supervisor') { 
+            if(username === supervisorCred.id && password === supervisorCred.password) { 
+                currentUser = { role: 'supervisor', id: 'admin', name: 'Supervisor' }; 
+                document.getElementById('loginPage').classList.add('hidden'); 
+                renderSupervisorDashboard(); 
+                return; 
+            } 
+            alert('❌ Invalid supervisor credentials'); 
+            return; 
+        }
+        else if(role === 'teacher') { 
+            const teacher = teachers.find(t => t.username === username && t.password === password); 
+            if(teacher) { 
+                let inchargeClass = null;
+                for(let cls in classIncharge) {
+                    if(classIncharge[cls] === teacher.id) {
+                        inchargeClass = cls;
+                        break;
+                    }
+                }
+                currentUser = { role: 'teacher', id: teacher.id, name: teacher.name, subject: teacher.subject, assignedClasses: teacher.classes || [], inchargeClass: inchargeClass }; 
+                document.getElementById('loginPage').classList.add('hidden'); 
+                renderTeacherPanel(); 
+                return; 
+            } 
+            alert('❌ Invalid teacher credentials'); 
+        }
+        else if(role === 'student') { 
+            const student = students.find(s => s.username === username && s.password === password); 
+            if(student) { 
+                currentUser = { role: 'student', id: student.id, name: student.name, classSec: student.class, rollNo: student.rollNo }; 
+                document.getElementById('loginPage').classList.add('hidden'); 
+                renderStudentPanel(); 
+                return; 
+            } 
+            alert('❌ Invalid student credentials.'); 
+        }
+    }
+
+    window.logout = function() { 
+        currentUser = null; 
+        document.getElementById('loginPage').classList.remove('hidden'); 
+        document.getElementById('app').innerHTML = ''; 
+    }
+
+    // ======================= SUPERVISOR DASHBOARD =======================
+    function renderSupervisorDashboard() {
+        document.getElementById('app').innerHTML = `<div class="card"><div class="row" style="justify-content:space-between;"><h2>👑 Supervisor Console</h2><button onclick="logout()" class="danger">Logout</button></div>
+        <div class="grid-buttons">
+            <button onclick="showManageTeachers()" class="primary">📚 Manage Teachers</button>
+            <button onclick="showManageStudents()" class="success">🎓 Manage Students</button>
+            <button onclick="showClassInchargeManager()" class="warning">👨‍🏫 Assign Class Incharge</button>
+            <button onclick="showRequests()" class="warning">📨 Edit Requests (${editRequests.filter(r=>r.status==='pending').length})</button>
+            <button onclick="showTimetableEditor()" class="info">📅 Set Timetable</button>
+            <button onclick="showMonthlyReport()" class="info">📊 Monthly Report</button>
+            <button onclick="showAdvancedEditAttendance()" class="warning">✏️ Advanced Edit Attendance</button>
+            <button onclick="showEditMarks()" class="success">📝 Edit Marks</button>
+            <button onclick="showOverallClassAttendance()" class="info">📈 Class Overall Attendance</button>
+            <button onclick="showFeesManagement()" class="success" style="background:#8b5cf6;">💰 Fees Management</button>
+            <button onclick="showSubjectsExamsManager()" class="primary" style="background:#ec489a;">📚 Subjects & Exams</button>
+            <button onclick="showNotificationManager()" class="info" style="background:#f97316;">🔔 Send Notification</button>
+        </div><div id="supervisorPanel"></div></div>`;
+        showManageStudents();
+        setTimeout(() => {
+            const panel = document.getElementById('supervisorPanel');
+            if(panel && !document.getElementById('importExportSection')) {
+                const div = document.createElement('div');
+                div.id = 'importExportSection';
+                div.className = 'import-export-row';
+                div.innerHTML = `<div class="row"><div style="display:flex; gap:10px;"><button onclick="exportAllData()" class="primary" style="background:#10b981;">📤 Export All Data</button>
+                <label for="importFileInput" class="primary" style="background:#3b82f6; padding:10px 20px; border-radius:12px; cursor:pointer;">📥 Import All Data (JSON)</label>
+                <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importAllData(this.files[0])"></div></div>`;
+                panel.parentNode.insertBefore(div, panel);
+            }
+        }, 100);
+    }
+
+    // ======================= MANAGE STUDENTS =======================
+    window.showManageStudents = function() { 
+        let classCounts = {}; 
+        CLASSES.forEach(c => { classCounts[c] = students.filter(s => s.class === c).length; }); 
+        let html = `<div class="card"><h3>➕ Register New Student</h3>
+        <div class="row"><input id="new_sid" placeholder="Student ID"><input id="new_suser" placeholder="Username"></div>
+        <div class="row"><input id="new_spass" type="password" placeholder="Set Password"><input id="new_sname" placeholder="Full Name"></div>
+        <div class="row"><select id="new_sclass">${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><input id="new_sroll" placeholder="Roll No" type="number"></div>
+        <div class="row"><input id="new_sparent" placeholder="Parent Name"><input id="new_sphone" placeholder="Phone"></div>
+        <button onclick="addStudent()" class="success">➕ Create Student</button></div>
+        <div class="card"><h3>📋 Students List</h3>
+        <div class="class-filter-buttons">${CLASSES.map(c => `<button class="class-btn" onclick="filterStudentsByClass('${c}')">${c} (${classCounts[c]||0})</button>`).join('')}<button class="class-btn active" onclick="filterStudentsByClass('all')">All (${students.length})</button></div>
+        <div id="studentsListContainer"></div></div>`;
+        document.getElementById('supervisorPanel').innerHTML = html;
+        filterStudentsByClass('all');
+    };
+    
+    window.filterStudentsByClass = function(className) {
+        currentClassFilter = className;
+        let filtered = className === 'all' ? [...students] : students.filter(s => s.class === className);
+        filtered.sort((a,b) => a.rollNo - b.rollNo);
+        let html = `<div style="overflow-x:auto;"><table class="student-table"><thead><tr><th>Roll</th><th>ID</th><th>Name</th><th>Class</th><th>Username</th><th>Parent</th><th>Phone</th><th>Password</th><th>Actions</th></tr></thead><tbody>`;
+        filtered.forEach(s => { 
+            html += `<tr><td class="text-center">${s.rollNo}</td><td class="text-center">${s.id}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center">${s.class}</td><td class="text-center">${s.username}</td><td class="text-center">${s.parent || '-'}</td><td class="text-center">${s.phone || '-'}</td><td class="text-center">••••••</td><td class="text-center"><button class="warning" onclick="resetStudentPassword('${s.id}')">Reset</button> <button class="danger" onclick="deleteStudent('${s.id}')">Delete</button></td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        document.getElementById('studentsListContainer').innerHTML = html;
+    };
+
+    window.addStudent = function() { 
+        let cls = document.getElementById('new_sclass').value; 
+        let rollNoVal = document.getElementById('new_sroll').value; 
+        let rolls = students.filter(s => s.class === cls).map(s => s.rollNo); 
+        let newRoll = rollNoVal ? parseInt(rollNoVal) : (Math.max(0, ...rolls, 0) + 1); 
+        let newPassword = document.getElementById('new_spass').value; 
+        if(!newPassword) { alert("Password required"); return; } 
+        students.push({ 
+            id: document.getElementById('new_sid').value, rollNo: newRoll, username: document.getElementById('new_suser').value, 
+            password: newPassword, name: document.getElementById('new_sname').value, class: cls, 
+            parent: document.getElementById('new_sparent').value || '', phone: document.getElementById('new_sphone').value || '' 
+        }); 
+        saveAll(); alert("Student created!"); showManageStudents(); 
+    };
+
+    window.resetStudentPassword = function(id) {
+        let s = students.find(s => s.id === id);
+        if(s) { let np = prompt("New password:", s.password); if(np) { s.password = np; saveAll(); filterStudentsByClass(currentClassFilter); } }
+    };
+    window.deleteStudent = function(id) { if(confirm("Delete?")){ students = students.filter(s => s.id !== id); attendanceLog = attendanceLog.filter(a => a.studentId !== id); saveAll(); filterStudentsByClass(currentClassFilter); } };
+
+    // ======================= CLASS INCHARGE MANAGER =======================
+    window.showClassInchargeManager = function() {
+        let html = `<div class="card"><h3>👨‍🏫 Assign Class Incharge</h3><table class="report-table"><thead><tr><th>Class</th><th>Current</th><th>Assign</th><th>Action</th></tr></thead><tbody>`;
+        CLASSES.forEach(cls => {
+            let currentId = classIncharge[cls] || '';
+            let currentName = currentId ? (teachers.find(t => t.id === currentId)?.name || 'None') : 'None';
+            html += `<tr><td class="text-center"><strong>${cls}</strong></td><td class="text-center">${currentName}</td><td class="text-center"><select id="incharge_${cls}"><option value="">-- Select --${teachers.map(t => `<option value="${t.id}" ${classIncharge[cls] === t.id ? 'selected' : ''}>${t.name} (${t.subject})</option>`).join('')}</select></td><td class="text-center"><button class="success" onclick="assignClassIncharge('${cls}')">Assign</button></td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        document.getElementById('supervisorPanel').innerHTML = html;
+    };
+    window.assignClassIncharge = function(className) {
+        let teacherId = document.getElementById(`incharge_${className}`).value;
+        if(!teacherId) delete classIncharge[className];
+        else classIncharge[className] = teacherId;
+        saveAll(); showClassInchargeManager();
+    };
+
+    // ======================= ADVANCED EDIT ATTENDANCE =======================
+    window.showAdvancedEditAttendance = function() { 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>✏️ Advanced Edit Attendance</h3><div class="row"><select id="editClassSelect"><option value="">Select Class</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><input type="date" id="editDateSelect" value="${getTodayDate()}"><select id="editPeriodSelect"><option value="">Select Period</option>${Array.from({length:PERIODS}, (_,i)=>`<option value="${i+1}">Period ${i+1}</option>`).join('')}</select><button onclick="loadAdvancedAttendance()" class="primary">🔍 Load</button></div><div id="advancedAttendancePanel"></div></div>`; 
+    };
+    
+    window.loadAdvancedAttendance = function() { 
+        let cls = document.getElementById('editClassSelect').value, date = document.getElementById('editDateSelect').value, periodNum = document.getElementById('editPeriodSelect').value; 
+        if(!cls || !date || !periodNum) return alert("Select all fields"); 
+        let periodNumInt = parseInt(periodNum); 
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b) => a.rollNo - b.rollNo); 
+        let existingRecords = {}; 
+        let existingLock = isAttendanceLocked(date, cls, periodNumInt); 
+        attendanceLog.forEach(a => { if(a.date === date && a.classSec === cls && a.periodNum === periodNumInt) existingRecords[a.studentId] = a.status; }); 
+        let presentCount = studentsInClass.filter(s => existingRecords[s.id] === 'present').length, absentCount = studentsInClass.filter(s => existingRecords[s.id] === 'absent').length, notMarkedCount = studentsInClass.filter(s => existingRecords[s.id] === undefined).length; 
+        let html = `<div class="edit-attendance-panel"><div class="summary-stats"><div class="stat-card"><div class="stat-number" style="color:#10b981;">${presentCount}</div><div class="stat-label">Present</div></div><div class="stat-card"><div class="stat-number" style="color:#ef4444;">${absentCount}</div><div class="stat-label">Absent</div></div><div class="stat-card"><div class="stat-number" style="color:#f59e0b;">${notMarkedCount}</div><div class="stat-label">Not Marked</div></div><div class="stat-card"><div class="stat-number">${studentsInClass.length}</div><div class="stat-label">Total</div></div></div>${existingLock ? '<div class="info-text">🔒 LOCKED. Editing will unlock.</div>' : ''}<div class="filter-bar"><input type="text" id="studentSearchInput" placeholder="🔍 Search..." class="search-input" onkeyup="filterAttendanceStudents()"><select id="statusFilterSelect" onchange="filterAttendanceStudents()"><option value="all">All</option><option value="present">Present only</option><option value="absent">Absent only</option><option value="notmarked">Not marked</option></select><button onclick="toggleAllStudents(true)" class="success">✅ All Present</button><button onclick="toggleAllStudents(false)" class="danger">❌ All Absent</button></div><div class="bulk-actions"><button onclick="bulkMarkPresent()" class="success">Mark Selected Present</button><button onclick="bulkMarkAbsent()" class="danger">Mark Selected Absent</button><button onclick="clearSelection()" class="info">Clear</button></div><div id="attendanceStudentsList" class="attendance-check-group"></div><div class="row"><button onclick="saveAdvancedAttendance('${cls}','${date}',${periodNumInt})" class="success">💾 Save & Unlock</button><button onclick="loadAdvancedAttendance()" class="info">Refresh</button></div></div>`; 
+        document.getElementById('advancedAttendancePanel').innerHTML = html; 
+        renderStudentChecklistForAttendance(studentsInClass, existingRecords); 
+    };
+    
+    function renderStudentChecklistForAttendance(studentsList, existingRecords) { 
+        let filterStatus = document.getElementById('statusFilterSelect')?.value || 'all'; 
+        let searchTerm = document.getElementById('studentSearchInput')?.value.toLowerCase() || ''; 
+        let filteredStudents = studentsList.filter(s => { 
+            let matchesSearch = s.name.toLowerCase().includes(searchTerm) || s.rollNo.toString().includes(searchTerm); 
+            let status = existingRecords[s.id] || 'notmarked'; 
+            if (filterStatus === 'present') return matchesSearch && status === 'present'; 
+            if (filterStatus === 'absent') return matchesSearch && status === 'absent'; 
+            if (filterStatus === 'notmarked') return matchesSearch && status === 'notmarked'; 
+            return matchesSearch; 
+        }); 
+        let html = ''; 
+        filteredStudents.forEach(s => { 
+            let isPresent = existingRecords[s.id] === 'present'; 
+            html += `<label style="display: flex; align-items: center; justify-content: space-between; width: calc(33% - 10px); min-width: 200px;"><span><input type="checkbox" class="studentAttCheckbox" value="${s.id}" ${isPresent ? 'checked' : ''}> <strong>Roll ${s.rollNo}</strong>: ${s.name}</span><span style="color: ${isPresent ? '#10b981' : '#ef4444'};">${isPresent ? 'Present' : 'Absent'}</span></label>`; 
+        }); 
+        if (filteredStudents.length === 0) html = '<p class="info-text">No students match filter.</p>'; 
+        document.getElementById('attendanceStudentsList').innerHTML = html; 
+    }
+    
+    window.filterAttendanceStudents = function() { let cls = document.getElementById('editClassSelect')?.value, date = document.getElementById('editDateSelect')?.value, periodNum = document.getElementById('editPeriodSelect')?.value; if(cls && date && periodNum) loadAdvancedAttendance(); };
+    window.toggleAllStudents = function(setPresent) { document.querySelectorAll('.studentAttCheckbox').forEach(cb => cb.checked = setPresent); };
+    window.bulkMarkPresent = function() { document.querySelectorAll('.studentAttCheckbox').forEach(cb => cb.checked = true); alert("Marked as Present (save to apply)"); };
+    window.bulkMarkAbsent = function() { document.querySelectorAll('.studentAttCheckbox').forEach(cb => cb.checked = false); alert("Marked as Absent (save to apply)"); };
+    window.clearSelection = function() { document.querySelectorAll('.studentAttCheckbox').forEach(cb => cb.checked = false); };
+    window.saveAdvancedAttendance = function(cls, date, periodNum) { let checkedIds = [...document.querySelectorAll('.studentAttCheckbox:checked')].map(cb => cb.value); let allStudents = students.filter(s => s.class === cls); let updatedLog = attendanceLog.filter(a => !(a.date === date && a.classSec === cls && a.periodNum === periodNum)); allStudents.forEach(std => { updatedLog.push({ date, classSec: cls, studentId: std.id, period: `Period ${periodNum}`, periodNum, subject: 'Supervisor Edit', teacherName: 'Supervisor', status: checkedIds.includes(std.id) ? 'present' : 'absent' }); }); attendanceLog = updatedLog; lockedAttendance = lockedAttendance.filter(l => !(l.date === date && l.classSec === cls && l.periodNum === periodNum)); saveAll(); alert(`✅ Updated!`); loadAdvancedAttendance(); };
+
+    // ======================= TEACHER PANEL =======================
+    function renderTeacherPanel() { 
+        document.getElementById('app').innerHTML = `<div class="card"><div class="row"><h2>👩‍🏫 ${currentUser.name} (${currentUser.subject})</h2><button onclick="logout()" class="danger">Logout</button></div>
+        <div class="info-text">📌 You can mark attendance ONLY for periods where you teach ${currentUser.subject}</div>
+        <div class="grid-buttons">
+            <button onclick="showTeacherAttendance()" class="primary">📝 Mark Attendance</button>
+            <button onclick="showTeacherMarks()" class="success">📈 Enter Marks</button>
+            ${currentUser.inchargeClass ? `<button onclick="showInchargeView()" class="info">👨‍🏫 View My Class</button>` : ''}
+            <button onclick="requestEditAccess()" class="warning">📨 Request Edit</button>
+            <button onclick="exportAllData()" class="info">📤 Export</button>
+        </div><div id="teacherContent"></div></div>`; 
+        showTeacherAttendance();
+    }
+    
+    window.showTeacherAttendance = function() {
+        document.getElementById('teacherContent').innerHTML = `<div class="date-selector"><input type="date" id="attendanceDatePicker" value="${getTodayDate()}"><button onclick="changeTeacherDate()" class="primary">Go</button></div>
+        <div id="teacherAttendanceClassSection"></div>`;
+        loadTeacherAttendanceSection();
+    };
+    
+    function loadTeacherAttendanceSection() {
+        let container = document.getElementById('teacherAttendanceClassSection');
+        container.innerHTML = `<select id="teacherClassAtt">${currentUser.assignedClasses.map(c=>`<option>${c}</option>`).join('')}</select><button onclick="loadTeacherPeriods()" class="primary">Load Periods</button><div id="teacherPeriodsDiv"></div>`;
+    }
+    
+    window.changeTeacherDate = function() { selectedAttendanceDate = document.getElementById('attendanceDatePicker').value; loadTeacherAttendanceSection(); };
+    
+    window.loadTeacherPeriods = function() { 
+        let cls = document.getElementById('teacherClassAtt').value; 
+        if(!cls) return; 
+        let dayName = getDayName(selectedAttendanceDate);
+        let slots = timetableDB[cls]?.[dayName] || []; 
+        let html = `<h4>${cls} - ${dayName}</h4>`;
+        let foundAny = false;
+        for(let p=1;p<=PERIODS;p++) { 
+            let entry = slots[p-1] || "Free";
+            let isMySubject = entry.toUpperCase().includes(currentUser.subject.toUpperCase());
+            let existing = attendanceLog.find(a => a.date === selectedAttendanceDate && a.classSec === cls && a.periodNum === p); 
+            let isLocked = isAttendanceLocked(selectedAttendanceDate, cls, p); 
+            
+            if(isMySubject) {
+                foundAny = true;
+                if(isLocked || existing) {
+                    html += `<div class="card"><strong>Period ${p}: ${entry}</strong><div>Status: <span class="${existing?.status === 'present' ? 'present-badge' : 'absent-badge'}">${existing?.status?.toUpperCase() || 'N/A'}</span> 🔒 Locked</div></div>`;
+                } else {
+                    html += `<div class="card"><strong>Period ${p}: ${entry}</strong><button onclick="loadStudentsForPeriod('${cls}',${p})" class="primary">Mark Attendance</button><div id="teacher_period_${p}_div"></div></div>`;
+                }
+            } else {
+                html += `<div class="period-card">Period ${p}: ${entry} (Not your subject)</div>`;
+            }
+        }
+        if(!foundAny) html += `<p class="info-text">⚠️ No periods found with your subject (${currentUser.subject}) on this day for this class.</p>`;
+        document.getElementById('teacherPeriodsDiv').innerHTML = html; 
+    };
+    
+    window.loadStudentsForPeriod = function(cls, periodNum) { 
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo); 
+        let html = `<div><button onclick="selectAllStudents(true)" class="success">✅ Select All</button> <button onclick="selectAllStudents(false)" class="danger">❌ Clear All</button></div><div class="attendance-check-group" id="teacher_chk_${periodNum}">${studentsInClass.map(s => `<label><input type="checkbox" class="teacherAttChk" value="${s.id}"> <strong>Roll ${s.rollNo}</strong>: ${s.name}</label>`).join('')}</div><button onclick="saveTeacherAttendance('${cls}',${periodNum})" class="success">Submit & Lock</button>`; 
+        document.getElementById(`teacher_period_${periodNum}_div`).innerHTML = html; 
+    };
+    
+    window.selectAllStudents = function(selectAll) { document.querySelectorAll('.teacherAttChk').forEach(cb => cb.checked = selectAll); };
+    
+    window.saveTeacherAttendance = function(cls, periodNum) { 
+        let checked = [...document.querySelectorAll(`#teacher_chk_${periodNum} input:checked`)].map(cb => cb.value); 
+        let allStudents = students.filter(s => s.class === cls); 
+        let updated = attendanceLog.filter(a => !(a.date === selectedAttendanceDate && a.classSec === cls && a.periodNum === periodNum)); 
+        allStudents.forEach(std => updated.push({ date: selectedAttendanceDate, classSec: cls, studentId: std.id, period: `Period ${periodNum}`, periodNum, subject: currentUser.subject, teacherName: currentUser.name, status: checked.includes(std.id) ? 'present' : 'absent' })); 
+        attendanceLog = updated; 
+        lockedAttendance.push({ date: selectedAttendanceDate, classSec: cls, periodNum, teacherId: currentUser.id }); 
+        saveAll(); 
+        alert(`Period ${periodNum} attendance saved & locked!`); 
+        loadTeacherPeriods(); 
+    };
+    
+    window.showTeacherMarks = function() { 
+        document.getElementById('teacherContent').innerHTML = `<div class="card"><h3>📝 Enter Marks (${currentUser.subject})</h3>
+        <div class="row"><select id="marksClassSel">${currentUser.assignedClasses.map(c=>`<option>${c}</option>`).join('')}</select>
+        <select id="marksExamSel">${GLOBAL_EXAMS.map(e=>`<option>${e}</option>`).join('')}</select>
+        <button onclick="loadTeacherMarks()" class="primary">Load</button></div>
+        <div id="teacherMarksDiv"></div>
+        <button id="saveTeacherMarksBtn" style="display:none;" onclick="saveTeacherMarks()" class="success">Save & Lock</button></div>`; 
+    };
+    
+    window.loadTeacherMarks = function() { 
+        let cls = document.getElementById('marksClassSel').value; 
+        let exam = document.getElementById('marksExamSel').value; 
+        if(!cls || !exam) return;
+        let max = getMaxMarksForExam(exam, cls); 
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo); 
+        let html = `<div class="report-table-wrapper"><h4>${cls} | ${exam} (Max: ${max})</h4><table class="report-table"><thead><tr><th>Roll No</th><th>Student Name</th><th>Marks</th><th>Status</th></tr></thead><tbody>`;
+        
+        studentsInClass.forEach(s => { 
+            let key = `${s.id}_${cls}`; 
+            let existing = marksDB[key]?.[currentUser.subject]?.[exam] || ''; 
+            let isLocked = isMarkLocked(s.id, currentUser.subject, exam); 
+            
+            if(isLocked) {
+                html += `<tr><td class="text-center">${s.rollNo}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center"><strong>${existing}/${max}</strong> <span class="locked-badge">LOCKED</span></td><td class="text-center">Locked</td></tr>`;
+            } else {
+                html += `<tr><td class="text-center">${s.rollNo}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center"><input type="number" id="mark_${s.id}" value="${existing}" min="0" max="${max}" style="width:80px; text-align:center;"></td><td class="text-center">Editable</td></tr>`;
+            }
+        });
+        html += `</tbody></table></div><div class="info-text">💡 Tip: Enter marks out of ${max}</div>`;
+        document.getElementById('teacherMarksDiv').innerHTML = html; 
+        document.getElementById('saveTeacherMarksBtn').style.display = 'inline-block'; 
+    };
+    
+    window.saveTeacherMarks = function() { 
+        let cls = document.getElementById('marksClassSel').value; 
+        let exam = document.getElementById('marksExamSel').value; 
+        let max = getMaxMarksForExam(exam, cls); 
+        let savedCount = 0;
+        
+        students.filter(s => s.class === cls).forEach(s => { 
+            let inp = document.getElementById(`mark_${s.id}`); 
+            if(inp && inp.value !== '') { 
+                let num = Number(inp.value); 
+                if(num >= 0 && num <= max) { 
+                    let key = `${s.id}_${cls}`; 
+                    if(!marksDB[key]) marksDB[key] = {}; 
+                    if(!marksDB[key][currentUser.subject]) marksDB[key][currentUser.subject] = {}; 
+                    marksDB[key][currentUser.subject][exam] = num; 
+                    if(!lockedMarks.some(l => l.studentId === s.id && l.subject === currentUser.subject && l.exam === exam)) {
+                        lockedMarks.push({ studentId: s.id, subject: currentUser.subject, exam: exam }); 
+                    }
+                    savedCount++;
+                } else {
+                    alert(`Invalid marks for ${s.name}. Marks must be between 0 and ${max}`);
+                    return;
+                } 
+            } 
+        }); 
+        saveAll(); 
+        alert(`✅ ${savedCount} marks saved & locked!`); 
+        showTeacherMarks(); 
+    };
+    
+    // ======================= INCHARGE VIEW =======================
+    window.showInchargeView = function() {
+        let cls = currentUser.inchargeClass;
+        if(!cls) { alert("No class assigned"); return; }
+        let html = `<div class="card"><h3>👨‍🏫 ${cls} - Class Details</h3>
+        <div class="grid-buttons">
+            <button onclick="showInchargeStudentList()" class="primary">📋 Students</button>
+            <button onclick="showInchargeClassReport()" class="info">📊 Attendance</button>
+            <button onclick="showInchargeFeesList()" class="success">💰 Fees</button>
+        </div>
+        <div id="inchargeViewContent"></div></div>`;
+        document.getElementById('teacherContent').innerHTML = html;
+        showInchargeStudentList();
+    };
+    
+    window.showInchargeStudentList = function() {
+        let cls = currentUser.inchargeClass;
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo);
+        document.getElementById('inchargeViewContent').innerHTML = `<div class="report-table-wrapper"><table class="report-table"><thead><tr><th>Roll No</th><th>Student Name</th><th>Parent</th><th>Phone</th></tr></thead><tbody>${studentsInClass.map(s => `<tr><td class="text-center">${s.rollNo}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center">${s.parent || '-'}</td><td class="text-center">${s.phone || '-'}</td></tr>`).join('')}</tbody></table></div>`;
+    };
+    
+    window.showInchargeClassReport = function() {
+        let cls = currentUser.inchargeClass;
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo);
+        let html = `<div class="report-table-wrapper"><table class="report-table"><thead><tr><th>Roll No</th><th>Student Name</th><th>Present</th><th>Absent</th><th>Total Days</th><th>Attendance %</th></tr></thead><tbody>`;
+        studentsInClass.forEach(std => {
+            let records = attendanceLog.filter(a => a.studentId === std.id);
+            let present = records.filter(r => r.status === 'present').length;
+            let absent = records.length - present;
+            let percent = records.length ? ((present/records.length)*100).toFixed(1) : 0;
+            let pClass = percent >= 75 ? 'percentage-high' : (percent >= 50 ? 'percentage-medium' : 'percentage-low');
+            html += `<tr><td class="text-center">${std.rollNo}</td><td class="text-center"><strong>${std.name}</strong></td><td class="text-center">${present}</td><td class="text-center">${absent}</td><td class="text-center">${records.length}</td><td class="text-center ${pClass}">${percent}%</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        document.getElementById('inchargeViewContent').innerHTML = html;
+    };
+    
+    window.showInchargeFeesList = function() {
+        let cls = currentUser.inchargeClass;
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo);
+        let html = `<div class="report-table-wrapper"><table class="report-table"><thead><tr><th>Roll No</th><th>Student Name</th><th>Total Fee (₹)</th><th>Paid (₹)</th><th>Due (₹)</th><th>Status</th></tr></thead><tbody>`;
+        studentsInClass.forEach(s => {
+            let fee = feesDB[s.id] || { totalFee: (s.class === '10' ? 25000 : 18000), paid: 0, due: (s.class === '10' ? 25000 : 18000) };
+            let statusClass = fee.due === 0 ? 'fee-paid' : (fee.paid > 0 ? 'fee-partial' : 'fee-pending');
+            let statusText = fee.due === 0 ? 'Paid' : (fee.paid > 0 ? 'Partial' : 'Pending');
+            html += `<tr><td class="text-center">${s.rollNo}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center">₹${fee.totalFee}</td><td class="text-center">₹${fee.paid}</td><td class="text-center">₹${fee.due}</td><td class="text-center ${statusClass}">${statusText}</td></tr>`;
+        });
+        html += `</tbody></table><p class="info-text">View only - payments collected by supervisor</p></div>`;
+        document.getElementById('inchargeViewContent').innerHTML = html;
+    };
+    
+    window.requestEditAccess = function() { 
+        let reason = prompt("Reason:"); if(reason) { editRequests.push({ teacherId: currentUser.id, teacherName: currentUser.name, requestType: 'Edit Access', details: reason, date: getTodayDate(), status: 'pending' }); saveAll(); alert("Request sent"); renderTeacherPanel(); } 
+    };
+
+    // ======================= STUDENT PANEL =======================
+    function renderStudentPanel() { 
+        let myClass = currentUser.classSec; 
+        let myId = currentUser.id; 
+        let today = getTodayDate(); 
+        
+        let todayAttendance = attendanceLog.filter(a => a.studentId === myId && a.date === today); 
+        let allAttendance = attendanceLog.filter(a => a.studentId === myId); 
+        let totalPresent = allAttendance.filter(a => a.status === 'present').length; 
+        let percent = allAttendance.length ? (totalPresent / allAttendance.length * 100).toFixed(1) : 0; 
+        let percentClass = percent >= 75 ? 'percentage-high' : (percent >= 50 ? 'percentage-medium' : 'percentage-low'); 
+        
+        let myNotifications = notificationsDB.filter(n => n.classTarget === 'all' || n.classTarget === myClass);
+        let inchargeTeacherId = classIncharge[myClass];
+        let inchargeTeacher = inchargeTeacherId ? teachers.find(t => t.id === inchargeTeacherId) : null;
+        let inchargeName = inchargeTeacher ? inchargeTeacher.name : 'Not Assigned';
+        
+        let notifHtml = `<div class="card"><h3>🔔 Notifications</h3>${myNotifications.length ? myNotifications.map(n => `<div class="notification-item"><div class="notification-content"><strong>${n.title}</strong><br>${n.message}<br><span class="info-text">${n.date}</span></div></div>`).join('') : '<p>No notifications</p>'}</div>`;
+        
+        let timetableHtml = `<h3>📚 Timetable</h3>${DAYS.map(day => `<div class="card"><strong>${day}</strong><div class="period-grid">${(timetableDB[myClass]?.[day] || []).map((s,i)=>`<div class="period-card">P${i+1}: ${s}</div>`).join('')}</div></div>`).join('')}`; 
+        
+        let key = `${myId}_${myClass}`;
+        
+        let marksHtml = `<h3>📊 My Marks</h3><div class="report-table-wrapper"><table class="report-table"><thead><tr><th>Subject</th>${GLOBAL_EXAMS.map(e => `<th>${e}</th>`).join('')}</tr></thead><tbody>`;
+        
+        GLOBAL_SUBJECTS.forEach(sub => {
+            marksHtml += `<tr><td class="text-center"><strong>${sub}</strong></td>`;
+            GLOBAL_EXAMS.forEach(ex => { 
+                let val = marksDB[key]?.[sub]?.[ex]; 
+                let max = getMaxMarksForExam(ex, myClass); 
+                if(val !== undefined && val !== null && val !== '') {
+                    let percentage = (val / max) * 100;
+                    let colorClass = percentage >= 60 ? 'percentage-high' : (percentage >= 35 ? 'percentage-medium' : 'percentage-low');
+                    marksHtml += `<td class="text-center"><span class="${colorClass}">${val}/${max}</span></td>`;
+                } else {
+                    marksHtml += `<td class="text-center">—</td>`;
+                }
+            });
+            marksHtml += `</tr>`;
+        });
+        marksHtml += `</tbody></table></div>`;
+        
+        let feeInfo = feesDB[myId] || { totalFee: 0, paid: 0, due: 0 };
+        
+        document.getElementById('app').innerHTML = `<div class="card">
+            <div class="row" style="justify-content:space-between;">
+                <h2>🎓 ${currentUser.name} (${myClass} | Roll No: ${currentUser.rollNo})</h2>
+                <button onclick="logout()" class="danger">Logout</button>
+            </div>
+            <div class="card"><h3>👨‍🏫 Class Incharge: ${inchargeName}</h3></div>
+            <div class="import-export-row">
+                <label for="studentImportInput" class="student-import-btn">📁 Import My Data</label>
+                <input type="file" id="studentImportInput" accept=".json" style="display:none;" onchange="importStudentData(this.files[0])">
+            </div>
+            ${notifHtml}
+            <div class="card">
+                <h3>📈 Overall Attendance</h3>
+                <p class="${percentClass}" style="font-size:2rem;">${percent}%</p>
+                <p>Present: ${totalPresent} / ${allAttendance.length} days</p>
+            </div>
+            <div class="card">
+                <h3>📅 Today's Attendance (${today})</h3>
+                ${todayAttendance.length ? `<div class="period-grid">${todayAttendance.map(a => `<div class="period-card">${a.period}<br><span class="${a.status === 'present' ? 'present-badge' : 'absent-badge'}">${a.status.toUpperCase()}</span></div>`).join('')}</div>` : '<p>No attendance marked yet today.</p>'}
+            </div>
+            <div class="card">
+                <h3>💰 Fee Status</h3>
+                <p><strong>Total Fee:</strong> ₹${feeInfo.totalFee.toLocaleString()} | 
+                   <strong>Paid:</strong> ₹${feeInfo.paid.toLocaleString()} | 
+                   <strong>Due:</strong> ₹${feeInfo.due.toLocaleString()}</p>
+            </div>
+            ${marksHtml}
+            ${timetableHtml}
+        </div>`; 
+    }
+    
+    window.importStudentData = function(file) {
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (imported.marksDB) {
+                    for (let key in imported.marksDB) {
+                        if (key.startsWith(currentUser.id)) marksDB[key] = imported.marksDB[key];
+                    }
+                }
+                if (imported.attendanceLog) {
+                    let newAtt = imported.attendanceLog.filter(a => a.studentId === currentUser.id);
+                    if(newAtt.length) attendanceLog = attendanceLog.filter(a => a.studentId !== currentUser.id).concat(newAtt);
+                }
+                saveAll();
+                alert("Data imported successfully!");
+                renderStudentPanel();
+            } catch(err) { alert("Invalid file: " + err.message); }
+        };
+        reader.readAsText(file);
+    };
+
+    // ======================= OTHER SUPERVISOR FUNCTIONS =======================
+    window.showManageTeachers = function() { 
+        let html = `<div class="card"><h3>Create Teacher</h3><div class="row"><input id="tid" placeholder="ID"><input id="tuser" placeholder="Username"></div><div class="row"><input id="tpass" placeholder="Password"><input id="tname" placeholder="Name"></div><div class="row"><input id="tsub" placeholder="Subject"></div><div><strong>Assign Classes:</strong><div id="teacherClassesCheck"></div></div><button onclick="createTeacher()" class="success">Create</button></div><div class="card"><h3>Teachers</h3><table class="teacher-table"><thead><tr><th>ID</th><th>Name</th><th>Subject</th><th>Classes</th><th>Actions</th></tr></thead><tbody>${teachers.map(t => `<tr><td class="text-center">${t.id}</td><td class="text-center"><strong>${t.name}</strong></td><td class="text-center">${t.subject}</td><td class="text-center">${t.classes?.join(', ') || 'None'}</td><td class="text-center"><button class="warning" onclick="resetTeacherPwd('${t.id}')">Reset</button> <button class="danger" onclick="deleteTeacher('${t.id}')">Delete</button></td></tr>`).join('')}</tbody>}</div>`;
+        document.getElementById('supervisorPanel').innerHTML = html; 
+        let container = document.getElementById('teacherClassesCheck'); if(container) { container.innerHTML = ''; CLASSES.forEach(c => { container.innerHTML += `<label><input type="checkbox" class="tclassChk" value="${c}"> ${c}</label><br>`; }); } 
+    };
+    
+    window.createTeacher = function() { 
+        let classes = [...document.querySelectorAll('.tclassChk:checked')].map(cb => cb.value); 
+        if(!classes.length) return alert("Select classes"); 
+        teachers.push({ 
+            id: document.getElementById('tid').value, 
+            username: document.getElementById('tuser').value, 
+            password: document.getElementById('tpass').value, 
+            name: document.getElementById('tname').value, 
+            subject: document.getElementById('tsub').value, 
+            classes 
+        }); 
+        saveAll(); 
+        showManageTeachers(); 
+    };
+    
+    window.resetTeacherPwd = function(id) { 
+        let t = teachers.find(t => t.id === id); 
+        let np = prompt("New password:", t.password); 
+        if(np) { t.password = np; saveAll(); showManageTeachers(); } 
+    };
+    
+    window.deleteTeacher = function(id) { 
+        if(confirm("Delete?")){ 
+            teachers = teachers.filter(t => t.id !== id); 
+            saveAll(); 
+            showManageTeachers(); 
+        } 
+    };
+    
+    window.showRequests = function() { 
+        let pending = editRequests.filter(r => r.status === 'pending'); 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>Requests</h3>${pending.map((r,i)=>`<div class="request-card"><strong>${r.teacherName}</strong><br>${r.details}<br><button class="success" onclick="approveRequest(${i})">Approve</button> <button class="danger" onclick="rejectRequest(${i})">Reject</button></div>`).join('')}</div>`; 
+    };
+    
+    window.approveRequest = function(i) { editRequests[i].status = 'approved'; saveAll(); showRequests(); };
+    window.rejectRequest = function(i) { editRequests[i].status = 'rejected'; saveAll(); showRequests(); };
+    
+    window.showTimetableEditor = function() { 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>Timetable</h3><select id="ttClass" onchange="loadTT()"><option>Select Class</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><div id="ttGrid"></div></div>`; 
+    };
+    
+    window.loadTT = function() { 
+        let cls = document.getElementById('ttClass').value; 
+        if(!cls) return; 
+        let html = ''; 
+        DAYS.forEach(day => { 
+            html += `<div><strong>${day}</strong><div class="period-grid">`; 
+            for(let p=1;p<=PERIODS;p++) { 
+                let val = timetableDB[cls]?.[day]?.[p-1] || ''; 
+                html += `<div><label>P${p}</label><input id="tt_${cls}_${day}_${p}" value="${val}"></div>`; 
+            } 
+            html += `</div></div>`; 
+        }); 
+        html += `<button onclick="saveTT('${cls}')" class="primary">Save</button>`; 
+        document.getElementById('ttGrid').innerHTML = html; 
+    };
+    
+    window.saveTT = function(cls) { 
+        if(!timetableDB[cls]) timetableDB[cls] = {}; 
+        DAYS.forEach(day => { 
+            let periods = []; 
+            for(let p=1;p<=PERIODS;p++) periods.push(document.getElementById(`tt_${cls}_${day}_${p}`).value || "Free"); 
+            timetableDB[cls][day] = periods; 
+        }); 
+        saveAll(); 
+        alert("Timetable Saved!"); 
+        showTimetableEditor(); 
+    };
+    
+    window.showMonthlyReport = function() { 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>Monthly Report</h3><div class="row"><select id="reportMonth">${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select><select id="reportYear"><option>2026</option></select><select id="reportClass"><option>All Classes</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><button onclick="generateReport()" class="primary">Generate</button></div><div id="reportResult"></div></div>`; 
+    };
+    
+    window.generateReport = function() { 
+        let month = parseInt(document.getElementById('reportMonth').value); 
+        let year = 2026; 
+        let classFilter = document.getElementById('reportClass').value; 
+        let monthStr = String(month).padStart(2,'0'); 
+        let filtered = attendanceLog.filter(a => a.date.startsWith(`${year}-${monthStr}`)); 
+        if(classFilter !== 'All Classes') filtered = filtered.filter(a => a.classSec === classFilter); 
+        let stats = {}; 
+        filtered.forEach(a => { 
+            if(!stats[a.studentId]) stats[a.studentId] = { present:0, total:0, name:'' }; 
+            let s = students.find(s=>s.id===a.studentId); 
+            if(s) stats[a.studentId].name=s.name; 
+            stats[a.studentId].total++; 
+            if(a.status==='present') stats[a.studentId].present++; 
+        }); 
+        let html = `<table class="report-table"><thead><tr><th>Student</th><th>Present</th><th>Total</th><th>%</th></tr></thead><tbody>${Object.values(stats).map(d => `<tr><td class="text-center">${d.name}</td><td class="text-center">${d.present}</td><td class="text-center">${d.total}</td><td class="text-center">${d.total?((d.present/d.total)*100).toFixed(1):0}%</td></tr>`).join('')}</tbody>}</div>`; 
+        document.getElementById('reportResult').innerHTML = html; 
+    };
+    
+    window.showEditMarks = function() { 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>Edit Marks</h3><div class="row"><select id="marksClass">${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><select id="marksSub">${GLOBAL_SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select><select id="marksExam">${GLOBAL_EXAMS.map(e=>`<option>${e}</option>`).join('')}</select></div><button onclick="loadMarksEdit()" class="primary">Load</button><div id="marksEditDiv"></div><button id="saveMarksBtn" style="display:none;" onclick="saveMarksEdit()" class="success">Save</button></div>`; 
+    };
+    
+    window.loadMarksEdit = function() { 
+        let cls = document.getElementById('marksClass').value, sub = document.getElementById('marksSub').value, exam = document.getElementById('marksExam').value; 
+        if(!cls) return; 
+        let max = getMaxMarksForExam(exam, cls); 
+        let studentsInClass = students.filter(s => s.class === cls).sort((a,b)=>a.rollNo-b.rollNo); 
+        let html = `<div class="report-table-wrapper"><h4>${cls} | ${sub} | ${exam} (Max: ${max})</h4><table class="report-table"><thead><tr><th>Roll</th><th>Student</th><th>Current</th><th>Edit</th></tr></thead><tbody>`;
+        
+        studentsInClass.forEach(s => { 
+            let key = `${s.id}_${cls}`; 
+            let val = marksDB[key]?.[sub]?.[exam] || ''; 
+            html += `<tr><td class="text-center">${s.rollNo}</td><td class="text-center"><strong>${s.name}</strong></td><td class="text-center">${val ? `${val}/${max}` : '—'}</td><td class="text-center"><input type="number" id="mark_${s.id}" value="${val}" min="0" max="${max}" style="width:80px;"></td></tr>`;
+        });
+        html += `</tbody></table></div>`; 
+        document.getElementById('marksEditDiv').innerHTML = html; 
+        document.getElementById('saveMarksBtn').style.display = 'inline-block'; 
+    };
+    
+    window.saveMarksEdit = function() { 
+        let cls = document.getElementById('marksClass').value, sub = document.getElementById('marksSub').value, exam = document.getElementById('marksExam').value, max = getMaxMarksForExam(exam, cls); 
+        students.filter(s => s.class === cls).forEach(s => { 
+            let val = document.getElementById(`mark_${s.id}`)?.value; 
+            if(val !== undefined && val !== '') { 
+                let num = Number(val); 
+                if(num >= 0 && num <= max) { 
+                    let key = `${s.id}_${cls}`; 
+                    if(!marksDB[key]) marksDB[key] = {}; 
+                    if(!marksDB[key][sub]) marksDB[key][sub] = {}; 
+                    marksDB[key][sub][exam] = num; 
+                    if(!lockedMarks.some(l => l.studentId === s.id && l.subject === sub && l.exam === exam)) 
+                        lockedMarks.push({ studentId: s.id, subject: sub, exam: exam }); 
+                } else { alert(`Invalid marks for ${s.name}`); }
+            } 
+        }); 
+        saveAll(); 
+        alert("Marks Saved!"); 
+        showEditMarks(); 
+    };
+    
+    window.showOverallClassAttendance = function() { 
+        document.getElementById('supervisorPanel').innerHTML = `<div class="card"><h3>Overall Attendance</h3><div class="row"><select id="overallClassSelect"><option>Select Class</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select><button onclick="loadOverallAttendance()" class="primary">Show</button></div><div id="overallAttendanceResult"></div></div>`; 
+    };
+    
+    window.loadOverallAttendance = function() { 
+        let className = document.getElementById('overallClassSelect').value; 
+        if(!className) return; 
+        let studentsInClass = students.filter(s => s.class === className); 
+        let html = `<table class="report-table"><thead><tr><th>Roll</th><th>Student</th><th>Present</th><th>Absent</th><th>Total</th><th>%</th></tr></thead><tbody>`;
+        
+        studentsInClass.forEach(std => { 
+            let records = attendanceLog.filter(a => a.studentId === std.id); 
+            let p = records.filter(r => r.status === 'present').length; 
+            let a = records.length - p; 
+            let percent = records.length ? ((p/records.length)*100).toFixed(1) : 0; 
+            let pClass = percent >= 75 ? 'percentage-high' : (percent >= 50 ? 'percentage-medium' : 'percentage-low');
+            html += `<tr><td class="text-center">${std.rollNo}</td><td class="text-center"><strong>${std.name}</strong></td><td class="text-center">${p}</td><td class="text-center">${a}</td><td class="text-center">${records.length}</td><td class="text-center ${pClass}">${percent}%</td></tr>`;
+        });
+        html += `</tbody>}</div>`; 
+        document.getElementById('overallAttendanceResult').innerHTML = html; 
+    };
+    
+    // ======================= FEES MANAGEMENT =======================
+    window.showFeesManagement = function() { 
+        let html = `<div class="card"><h3>💰 Fees Management</h3>
+        <div class="row"><select id="feeClassFilter"><option value="">All Classes</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select>
+        <button onclick="loadFeeStructure()" class="primary">📋 Load Fees</button>
+        <button onclick="showSetClassFee()" class="warning">🏷️ Set Class Fee Structure</button></div>
+        <div id="feesTableContainer" class="report-table-wrapper"></div></div>`;
+        document.getElementById('supervisorPanel').innerHTML = html; 
+        loadFeeStructure(); 
+    };
+    
+    window.showSetClassFee = function() { 
+        let classFeeHtml = `<div class="card" style="margin-top:15px;"><h4>Set Fee Amount for a Class</h4>
+        <div class="row"><select id="targetClassFee"><option value="">Select Class</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select>
+        <input id="newTotalFee" type="number" placeholder="Total Fee Amount (₹)"></div>
+        <button onclick="applyClassFee()" class="success">✓ Apply to All Students in Class</button></div>`;
+        let existingContainer = document.getElementById('feesTableContainer');
+        if(existingContainer) {
+            existingContainer.innerHTML = classFeeHtml + (existingContainer.innerHTML || '');
+        }
+    };
+    
+    window.applyClassFee = function() { 
+        let targetClass = document.getElementById('targetClassFee').value; 
+        let newFee = parseFloat(document.getElementById('newTotalFee').value); 
+        if(!targetClass || isNaN(newFee) || newFee <= 0) { alert("Select class and valid fee amount"); return; } 
+        students.filter(s => s.class === targetClass).forEach(s => { 
+            if(!feesDB[s.id]) feesDB[s.id] = { studentId: s.id, name: s.name, class: s.class, totalFee: newFee, paid: 0, due: newFee, transactions: [] }; 
+            else { feesDB[s.id].totalFee = newFee; feesDB[s.id].due = newFee - feesDB[s.id].paid; if(feesDB[s.id].due < 0) feesDB[s.id].due = 0; } 
+        }); 
+        saveAll(); 
+        alert(`✅ Fee structure updated for class ${targetClass}`); 
+        loadFeeStructure(); 
+    };
+    
+    window.loadFeeStructure = function() { 
+        let classFilter = document.getElementById('feeClassFilter').value; 
+        let filteredStudents = classFilter ? students.filter(s => s.class === classFilter) : students; 
+        filteredStudents.sort((a,b) => a.rollNo - b.rollNo);
+        
+        let html = `<table class="report-table" style="width:100%;">
+            <thead>
+                <tr>
+                    <th style="width:8%;">Roll No</th>
+                    <th style="width:20%;">Student Name</th>
+                    <th style="width:10%;">Class</th>
+                    <th style="width:15%;">Total Fee (₹)</th>
+                    <th style="width:15%;">Paid (₹)</th>
+                    <th style="width:15%;">Due (₹)</th>
+                    <th style="width:12%;">Status</th>
+                    <th style="width:15%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>`;
+        
+        filteredStudents.forEach(s => { 
+            let fee = feesDB[s.id]; 
+            if(!fee) { 
+                let defaultTotal = (s.class === '10') ? 25000 : 18000;
+                fee = { studentId: s.id, name: s.name, class: s.class, totalFee: defaultTotal, paid: 0, due: defaultTotal, transactions: [] };
+                feesDB[s.id] = fee;
+            }
+            let statusClass = fee.due === 0 ? 'fee-paid' : (fee.paid > 0 ? 'fee-partial' : 'fee-pending');
+            let statusText = fee.due === 0 ? 'Paid' : (fee.paid > 0 ? 'Partial' : 'Pending');
+            html += `<tr>
+                <td class="text-center"><strong>${s.rollNo}</strong></td>
+                <td class="text-center"><strong>${s.name}</strong></td>
+                <td class="text-center">${s.class}</td>
+                <td class="text-center">₹${fee.totalFee.toLocaleString()}</td>
+                <td class="text-center">₹${fee.paid.toLocaleString()}</td>
+                <td class="text-center">₹${fee.due.toLocaleString()}</td>
+                <td class="text-center ${statusClass}">${statusText}</td>
+                <td class="text-center">
+                    <button class="success" onclick="recordPayment('${s.id}')" style="margin:2px;">💵 Pay</button>
+                    <button class="info" onclick="viewFeeHistory('${s.id}')" style="margin:2px;">📜 History</button>
+                </td>
+            </tr>`;
+        }); 
+        html += `</tbody></td></div>`;
+        document.getElementById('feesTableContainer').innerHTML = html; 
+        saveAll(); 
+    };
+    
+    window.recordPayment = function(studentId) { 
+        let amount = prompt("Enter amount to collect (₹):"); 
+        if(amount && !isNaN(amount) && parseFloat(amount) > 0) { 
+            let fee = feesDB[studentId]; 
+            if(!fee) { alert("Fee record missing"); return; } 
+            let payAmt = parseFloat(amount); 
+            let newPaid = fee.paid + payAmt; 
+            if(newPaid > fee.totalFee) newPaid = fee.totalFee; 
+            let newDue = fee.totalFee - newPaid; 
+            fee.paid = newPaid; 
+            fee.due = newDue; 
+            if(!fee.transactions) fee.transactions = []; 
+            fee.transactions.push({ amount: payAmt, date: getTodayDate(), remark: "Payment collected by supervisor" }); 
+            feesDB[studentId] = fee; 
+            saveAll(); 
+            alert(`✅ Payment recorded! Paid: ₹${fee.paid}, Due: ₹${fee.due}`); 
+            loadFeeStructure(); 
+        } else alert("❌ Invalid amount"); 
+    };
+    
+    window.viewFeeHistory = function(studentId) { 
+        let fee = feesDB[studentId]; 
+        if(!fee || !fee.transactions || fee.transactions.length === 0) { alert("No transactions found"); return; } 
+        let historyMsg = "📜 Transaction History:\n\n";
+        fee.transactions.forEach((t, i) => {
+            historyMsg += `${i+1}. ₹${t.amount} on ${t.date} - ${t.remark}\n`;
+        });
+        alert(historyMsg);
+    };
+    
+    window.showSubjectsExamsManager = function() { 
+        let html = `<div class="card"><h3>Subjects & Exams</h3><div class="row"><div><h4>Subjects</h4><div id="subjectsList"></div><input id="newSubject"><button onclick="addSubject()">+ Add</button></div><div><h4>Exams</h4><div id="examsList"></div><input id="newExam"><button onclick="addExam()">+ Add</button></div></div></div>`; 
+        document.getElementById('supervisorPanel').innerHTML = html; 
+        
+        function render() { 
+            document.getElementById('subjectsList').innerHTML = GLOBAL_SUBJECTS.map(s=>`<div>${s} <button class="danger" onclick="removeSubject('${s}')">❌</button></div>`).join(''); 
+            document.getElementById('examsList').innerHTML = GLOBAL_EXAMS.map(e=>`<div>${e} <button class="danger" onclick="removeExam('${e}')">❌</button></div>`).join(''); 
+        } 
+        render(); 
+        
+        window.addSubject = function() { 
+            let ns = document.getElementById('newSubject').value.trim().toUpperCase(); 
+            if(ns && !GLOBAL_SUBJECTS.includes(ns)) { 
+                GLOBAL_SUBJECTS.push(ns); 
+                saveAll(); 
+                render(); 
+            } 
+        }; 
+        
+        window.removeSubject = function(s) { 
+            GLOBAL_SUBJECTS = GLOBAL_SUBJECTS.filter(x=>x!==s); 
+            saveAll(); 
+            render(); 
+        }; 
+        
+        window.addExam = function() { 
+            let ne = document.getElementById('newExam').value.trim().toUpperCase(); 
+            if(ne && !GLOBAL_EXAMS.includes(ne)) { 
+                GLOBAL_EXAMS.push(ne); 
+                rebuildExamConfig(); 
+                saveAll(); 
+                render(); 
+            } 
+        }; 
+        
+        window.removeExam = function(e) { 
+            GLOBAL_EXAMS = GLOBAL_EXAMS.filter(x=>x!==e); 
+            delete EXAM_CONFIG[e]; 
+            saveAll(); 
+            render(); 
+        }; 
+    };
+    
+    window.showNotificationManager = function() { 
+        let html = `<div class="card"><h3>Notifications</h3><div class="row"><select id="notifClass"><option value="all">All Classes</option>${CLASSES.map(c=>`<option>${c}</option>`).join('')}</select></div><div class="row"><input id="notifTitle" placeholder="Title"></div><div class="row"><textarea id="notifMessage" placeholder="Message" rows="3"></textarea></div><button onclick="sendNotification()" class="success">Send</button><div id="notificationsList"></div></div>`; 
+        document.getElementById('supervisorPanel').innerHTML = html; 
+        loadNotif(); 
+    };
+    
+    window.sendNotification = function() { 
+        let target = document.getElementById('notifClass').value, 
+            title = document.getElementById('notifTitle').value, 
+            msg = document.getElementById('notifMessage').value; 
+        if(!title || !msg) return; 
+        notificationsDB.unshift({ id: Date.now(), classTarget: target, title, message: msg, date: getTodayDate() }); 
+        saveAll(); 
+        showNotificationManager(); 
+    };
+    
+    window.deleteNotification = function(id) { 
+        if(confirm("Delete?")) { 
+            notificationsDB = notificationsDB.filter(n => n.id !== id); 
+            saveAll(); 
+            showNotificationManager(); 
+        } 
+    };
+    
+    function loadNotif() { 
+        let container = document.getElementById('notificationsList'); 
+        if(!container) return; 
+        container.innerHTML = notificationsDB.map(n => `<div class="notification-item"><div class="notification-content"><strong>${n.title}</strong><br>${n.message}<br><span class="info-text">${n.date} | ${n.classTarget === 'all' ? 'All' : n.classTarget}</span></div><button class="delete-notif-btn" onclick="deleteNotification(${n.id})">Delete</button></div>`).join(''); 
+    }
+    
+    // Initialize everything
+    initDemoData(); 
+    saveAll();
+</script>
+</body>
+</html>

@@ -36,7 +36,7 @@ To provide a digital solution for managing school operations efficiently while d
 
 ## 👨‍💻 Author
 **Syed Rizwan**  
-B.Tech – Computer Applications & Artificial Intelligence (CAI)
+B.Tech – Computer Science & Artificial Intelligence (CAI)
 
 ## 📄 License
 This project is developed for educational and demonstration purposes.
